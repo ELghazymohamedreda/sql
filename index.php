@@ -72,60 +72,29 @@
 
 
 
-      // ----------    ajouter    ---------- //
+            // ----------    ajouter    ---------- //
       
 
-      if (isset($_POST['submit'])) {
-        $nom = $_POST['nom'];
-        $age = $_POST['age'];
-
-        // Vérifiez la connexion
-        if (!$con) {
-          die("Connexion échouée : " . mysqli_connect_error());
-        }
-        $sql = "insert into apprenant (nom, age)
-        values ('$nom', '$age')";
-        if (mysqli_query($con, $sql)) {
-          // echo "Données ajoutées avec succès";
-        } else {
-          echo "Error : " . $sql . "<br>" . mysqli_error($con);
-        }
-        mysqli_close($con);
-        header('location:' . $_SERVER['PHP_SELF']);
-        die();
-      }
-
-
-
-
-      if(isset($_POST['modal'])){
-        $id = $_POST['id'];
-        $modalsql = "SELECT * FROM apprenant where id='$id'";
-        $resultmodal = mysqli_query($conn, $modalsql);
-              if (mysqli_num_rows($resultmodal) > 0) {
-                while ($rowmodal = mysqli_fetch_assoc($resultmodal)) {
-                  echo'
-                  <div class="container" style="position:fixed;top:20%;left:25%; width:50%; border-radius:5px;   background-color:#fff; z-index:999; border: 2px solid black; " id="modal">
-
-                    <div style="overflow-y: scroll; height:380px;">
-                      <form action="index.php" method="post" style="display: flex; flex-direction:column; ">
-                        <input type="text" style="margin: 2%;"  name="titre" value="' . $rowmodal["nom"] . '" />
-                        <input type="text" style="margin: 2%;" name="description" value="' . $rowmodal["age"] . '" placeholder="description" />
-                        <input type="hidden" name="id"  value="'. $rowmodal["id"] . '">
-                        <input type="submit" style="margin: 2%;background-color:#47d147;color:#fff;border:none;" value="submit" name="submit">
-  
-                    </div>
-                  </div>
-                  ';
-    
-    
-                }
+            if (isset($_POST['submit'])) {
+              $nom = $_POST['nom'];
+              $age = $_POST['age'];
+      
+              // Vérifiez la connexion
+              if (!$con) {
+                die("Connexion échouée : " . mysqli_connect_error());
               }
-       
-      }
+              $sql = "insert into apprenant (nom, age)
+              values ('$nom', '$age')";
+              if (mysqli_query($con, $sql)) {
+                // echo "Données ajoutées avec succès";
+              } else {
+                echo "Error : " . $sql . "<br>" . mysqli_error($con);
+              }
+              mysqli_close($con);
+              header('location:' . $_SERVER['PHP_SELF']);
+              die();
 
-
-
+            }
 
 
       $sql = "SELECT * FROM apprenant";
@@ -151,6 +120,8 @@
                         <input type='hidden' name='id' id='id' value=".$row["code"].">     
                         <input type='submit' class='btn btn-danger' name='suprimer' value='Supprimer'>
                       </form>
+
+
                       <!-- Button trigger modal -->
                       <button type='button' class='btn btn-success' data-bs-toggle='modal' data-bs-target='#staticBackdrop".$row["code"]."'>
                         Modifier
@@ -187,20 +158,60 @@
                       
                     </td>
                 </tr>";
+                
 
           }
           echo "</table>";
 
-        }  
+        } 
   ?>
 
 
-  <button type="button"  onclick="modal()" >
-    Ajouter un apprenant
-  </button>
+
+  <?php
+
+      $servername = "localhost";
+      $username = "Root";
+      $password = "";
+      $dbname = "solicode";
+      $con = mysqli_connect($servername, $username, $password, $dbname);
+      if (!$con) {
+        die("Connexion échouée : " . mysqli_connect_error());
+      }
+
+            echo "
+
+                <button type='button' class='btn btn-success' data-bs-toggle='modal' data-bs-target='#staticBackdrop'>
+                Ajouter
+                </button>
+                
+                <!-- Modal -->
+                <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
+                  <div class='modal-dialog'>
+                    <div class='modal-content'>
+                      <div class='modal-header'>
+                        <h1 class='modal-title fs-5' id='staticBackdropLabel'>Ajouter un apprenant</h1>
+                        <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                      </div>
+                      <div class='modal-body'>
+                      <form method='post' action='index.php'>
+                      <div class='mb-3'>
+                        <label for='name' class='form-label'>Name</label>
+                        <input type='text' class='form-control' id='name' aria-describedby='emailHelp' name='nom'>
+                      </div>
+                      <div class='mb-3'>
+                        <label for='age' class='form-label'>Age</label>
+                        <input type='text' class='form-control' id='age' name='age'>
+                      </div>
+                      
+                      <button type='submit' name='submit' class='btn btn-success'>Ajouter</button>
+                    </form>
+                ";
+
+  ?>
 
 
-  <script src="bootstrap.bundle.min.js"></script>
+ <script src="bootstrap.bundle.min.js"></script>
 
 
 </body>
